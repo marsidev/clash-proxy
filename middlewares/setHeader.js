@@ -18,10 +18,10 @@ const retrieveLocalToken = () => {
   let tokenData = localStorage.getItem('tokenData')
   if (tokenData) {
     tokenData = JSON.parse(tokenData)
-    console.log('localToken found')
+    // console.log('localToken found')
     return tokenData
   }
-  console.log('localToken not found')
+  // console.log('localToken not found')
   return null
 }
 
@@ -41,7 +41,7 @@ const getNewToken = async ip => {
       fixedIp: ip
     }
 
-    console.log('getting new token...')
+    // console.log('getting new token...')
     const response = await axios.post(CR_API_TOKENER_URL, tokenerPayload)
 
     const tokenData = response.data
