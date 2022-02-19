@@ -14,15 +14,24 @@ const getIP = async () => {
   return response.data
 }
 
-const setAuthHeader = async (req, res, next) => {
+const retrieveLocalToken = () => {
+  let tokenData = localStorage.getItem('tokenData')
+  if (tokenData) {
+    tokenData = JSON.parse(tokenData)
+    console.log('localToken found')
+    return tokenData
+  }
+  console.log('localToken not found')
+  return null
+}
+
+const getNewToken = async ip => {
   try {
     const { CR_API_TOKENER_URL, CRDEV_EMAIL, CRDEV_PASSWORD, CR_API_TOKENER_WHITELIST } = process.env
 
     if (!CR_API_TOKENER_URL || !CRDEV_EMAIL || !CRDEV_PASSWORD || !CR_API_TOKENER_WHITELIST) {
       throw new Error('Missing environment variables')
     }
-
-    const ip = await getIP()
 
     const tokenerPayload = {
       game: 'clashroyale',
@@ -32,21 +41,35 @@ const setAuthHeader = async (req, res, next) => {
       fixedIp: ip
     }
 
+    console.log('getting new token...')
     const response = await axios.post(CR_API_TOKENER_URL, tokenerPayload)
-    // console.log({ response: response.data })
 
-    const token = response.data.key
+    const tokenData = response.data
+    localStorage.setItem('tokenData', JSON.stringify(tokenData))
 
-    const localToken = localStorage.getItem('token')
-    if (localToken) {
-      console.log('local token found')
-      console.log({ localToken })
+    return tokenData
+  } catch (error) {
+    console.log(error?.response?.data || error)
+  }
+}
+
+const setAuthHeader = async (req, res, next) => {
+  try {
+    const ip = await getIP()
+
+    let tokenData = retrieveLocalToken()
+
+    if (tokenData) {
+      const ipRange = tokenData.ipRange
+      if (!ipRange.includes(ip)) {
+        // console.log('ip is not in range')
+        tokenData = await getNewToken(ip)
+      }
     } else {
-      console.log('local token not found')
-      localStorage.setItem('token', token)
+      tokenData = await getNewToken(ip)
     }
 
-    req.headers.authorization = `Bearer ${token}`
+    req.headers.authorization = `Bearer ${tokenData.key}`
     next()
   } catch (error) {
     console.log(error?.response?.data || error)
