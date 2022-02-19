@@ -1,4 +1,3 @@
 ## What is this?
 
-This is a simple proxy for [CR Buttler API](https://cr.m1k3.dev).
-
+This is a simple proxy for [Clash Royale API](https://developer.clashroyale.com). No auth needed.
