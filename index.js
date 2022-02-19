@@ -7,13 +7,9 @@ const { setAuthHeader } = require('./middlewares/setHeader')
 // Create Express Server
 const app = express()
 
-// Configuration
-const PORT = 3000
-const TARGET_URL = 'https://api.clashroyale.com'
-
 // Proxy
 const crProxy = createProxyMiddleware({
-  target: TARGET_URL,
+  target: 'https://api.clashroyale.com',
   changeOrigin: true,
   pathRewrite: {
     '^/royale': ''
@@ -37,6 +33,7 @@ app.get('/info', (req, res, next) => {
 app.use('/royale', setAuthHeader, crProxy)
 
 // Start the Proxy
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
