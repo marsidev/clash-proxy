@@ -1,0 +1,41 @@
+{
+  "name": "clash-proxy",
+  "version": "1.0.0",
+  "description": "This is proxy for Clash Royale official API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "git": "git add . && git commit -m",
+    "postgit": "git push origin main",
+    "heroku": "git push heroku main",
+    "setvar": "heroku config:set",
+    "getvar": "heroku config:get"
+  },
+  "keywords": [
+    "clash-royale",
+    "clash-royale-api",
+    "supercell",
+    "api-key",
+    "proxy"
+  ],
+  "author": "Luis Marsiglia",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "0.25.0",
+    "cors": "2.8.5",
+    "dotenv": "16.0.0",
+    "express": "4.17.2",
+    "http-proxy-middleware": "2.0.3",
+    "morgan": "1.10.0",
+    "node-localstorage": "2.2.1",
+    "nodemon": "2.0.15"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-standard": "16.0.3",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "5.2.0"
+  }
+}
